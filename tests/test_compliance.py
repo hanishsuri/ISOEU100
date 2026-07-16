@@ -4,10 +4,13 @@ import uuid
 import pytest
 from fastapi.testclient import TestClient
 
+from cryptography.fernet import Fernet
+
 from backend.auth import create_clinician
 from backend.compliance import (
     REDACTION_PLACEHOLDER,
     PII_REDACTION_PLACEHOLDER,
+    _resolve_key,
     dob_to_age_years,
     get_bias_metrics,
     screen_and_redact,
@@ -244,6 +247,53 @@ def test_encryption_key_is_not_a_hardcoded_constant():
         pytest.skip("DATABASE_ENCRYPTION_KEY is explicitly configured in this environment")
     assert _LOCAL_KEY_PATH.exists()
     assert _LOCAL_KEY_PATH.read_bytes().strip() == ENCRYPTION_KEY
+
+
+def test_resolve_key_handles_both_key_and_passphrase_without_swallowing_unrelated_errors():
+    # A real Fernet key (the expected KMS/Vault output) is used as-is.
+    real_key = Fernet.generate_key()
+    assert _resolve_key(real_key.decode("utf-8")) == real_key
+
+    # A passphrase (not a valid Fernet key) is deterministically derived, not truncated/padded.
+    import base64, hashlib
+    passphrase = "a reasonably long passphrase from a vault"
+    resolved = _resolve_key(passphrase)
+    expected = base64.urlsafe_b64encode(hashlib.sha256(passphrase.encode("utf-8")).digest())
+    assert resolved == expected
+    Fernet(resolved)  # must be a valid, usable Fernet key
+
+    # Same passphrase always derives the same key (required for decrypting existing data).
+    assert _resolve_key(passphrase) == _resolve_key(passphrase)
+
+    # Too short to be a safe passphrase: refuse rather than silently weaken encryption.
+    with pytest.raises(ValueError, match="too short"):
+        _resolve_key("short")
+
+
+def test_model_prompt_includes_disclosure_bias_and_minimization_guidance():
+    # The LLM-facing prompt itself (not just the surrounding app/UI) should carry advisory-only
+    # framing, a demographic-inference prohibition, a data-minimization instruction, and
+    # confidence-calibration guidance — belt-and-suspenders alongside the UI disclosure banner
+    # and the application-level redaction/encryption/minimization controls.
+    _force_fallback()
+    headers, _ = _auth_headers()
+    response = client.post("/api/assessments", json=VALID_PAYLOAD, headers=headers)
+    assert response.status_code == 200
+    case_id = response.json()["id"]
+
+    conn = get_db_connection()
+    audit = conn.execute(
+        "SELECT full_prompt FROM audit_logs WHERE consultation_id = ? AND human_action = 'PENDING_APPROVAL'",
+        (case_id,),
+    ).fetchone()
+    conn.close()
+
+    prompt = audit["full_prompt"]
+    assert "advisory only" in prompt
+    assert "never a diagnosis" in prompt
+    assert "race, ethnicity, gender, religion" in prompt
+    assert "Do not request, restate, or infer any personal identifier" in prompt
+    assert "confidence" in prompt and "0.6" in prompt
 
 
 def test_fallback_heuristic_robustness():

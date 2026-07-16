@@ -56,8 +56,18 @@ def _resolve_key(configured: str) -> bytes:
     try:
         Fernet(configured.encode("utf-8"))
         return configured.encode("utf-8")
-    except Exception:
-        pass
+    except (ValueError, TypeError) as e:
+        # Fernet() raises ValueError for a malformed/wrong-length key (invalid base64,
+        # or valid base64 that doesn't decode to exactly 32 bytes) and TypeError for a
+        # non-bytes-like input. Both mean "not a real Fernet key" — expected when the
+        # operator configured a passphrase instead, so this falls through to derivation
+        # below rather than being an error. Anything else propagates: an unexpected
+        # exception here should fail startup loudly, not be silently absorbed.
+        logger.debug(
+            "DATABASE_ENCRYPTION_KEY (%d chars) is not a valid Fernet key (%s: %s); "
+            "treating it as a passphrase and deriving a key via SHA-256 instead.",
+            len(configured), type(e).__name__, e,
+        )
     if len(configured) < 16:
         raise ValueError(
             "DATABASE_ENCRYPTION_KEY is too short to be a safe passphrase (< 16 chars). "
