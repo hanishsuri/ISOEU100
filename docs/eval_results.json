@@ -1,0 +1,145 @@
+{
+  "generated_at": "2026-07-16T11:07:07.311343+00:00",
+  "model_scope": "These metrics measure ONLY the deterministic fallback engine (LOCAL_CLINICAL_HEURISTIC_V2). They say nothing about the accuracy of the OpenAI-backed path, which has not been evaluated.",
+  "dataset": {
+    "name": "HealthAssist synthetic clinical evaluation set",
+    "version": "1.0",
+    "n_cases": 20,
+    "caveat": "Synthetic, hand-labeled clinical scenarios for evaluating the fallback triage engine. Labels encode the safety rules for symptom severity (presence of red-flag acute keywords) and duration (>14 days for chronic risk). Perfect agreement is expected; this dataset serves to prevent regression in critical fallback logic."
+  },
+  "positive_class": "HIGH",
+  "confusion": {
+    "tp": 9,
+    "fp": 0,
+    "tn": 10,
+    "fn": 1
+  },
+  "metrics": {
+    "precision": 1.0,
+    "recall": 0.9,
+    "false_positive_rate": 0.0,
+    "accuracy": 0.95
+  },
+  "per_case": [
+    {
+      "id": 1,
+      "predicted": "HIGH",
+      "label": "HIGH",
+      "correct": true
+    },
+    {
+      "id": 2,
+      "predicted": "HIGH",
+      "label": "HIGH",
+      "correct": true
+    },
+    {
+      "id": 3,
+      "predicted": "LOW",
+      "label": "HIGH",
+      "correct": false
+    },
+    {
+      "id": 4,
+      "predicted": "HIGH",
+      "label": "HIGH",
+      "correct": true
+    },
+    {
+      "id": 5,
+      "predicted": "HIGH",
+      "label": "HIGH",
+      "correct": true
+    },
+    {
+      "id": 6,
+      "predicted": "HIGH",
+      "label": "HIGH",
+      "correct": true
+    },
+    {
+      "id": 7,
+      "predicted": "LOW",
+      "label": "NOT_HIGH",
+      "correct": true
+    },
+    {
+      "id": 8,
+      "predicted": "LOW",
+      "label": "NOT_HIGH",
+      "correct": true
+    },
+    {
+      "id": 9,
+      "predicted": "LOW",
+      "label": "NOT_HIGH",
+      "correct": true
+    },
+    {
+      "id": 10,
+      "predicted": "LOW",
+      "label": "NOT_HIGH",
+      "correct": true
+    },
+    {
+      "id": 11,
+      "predicted": "MEDIUM",
+      "label": "NOT_HIGH",
+      "correct": true
+    },
+    {
+      "id": 12,
+      "predicted": "MEDIUM",
+      "label": "NOT_HIGH",
+      "correct": true
+    },
+    {
+      "id": 13,
+      "predicted": "LOW",
+      "label": "NOT_HIGH",
+      "correct": true
+    },
+    {
+      "id": 14,
+      "predicted": "LOW",
+      "label": "NOT_HIGH",
+      "correct": true
+    },
+    {
+      "id": 15,
+      "predicted": "HIGH",
+      "label": "HIGH",
+      "correct": true
+    },
+    {
+      "id": 16,
+      "predicted": "HIGH",
+      "label": "HIGH",
+      "correct": true
+    },
+    {
+      "id": 17,
+      "predicted": "HIGH",
+      "label": "HIGH",
+      "correct": true
+    },
+    {
+      "id": 18,
+      "predicted": "HIGH",
+      "label": "HIGH",
+      "correct": true
+    },
+    {
+      "id": 19,
+      "predicted": "MEDIUM",
+      "label": "NOT_HIGH",
+      "correct": true
+    },
+    {
+      "id": 20,
+      "predicted": "MEDIUM",
+      "label": "NOT_HIGH",
+      "correct": true
+    }
+  ]
+}

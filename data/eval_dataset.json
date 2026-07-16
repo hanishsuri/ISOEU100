@@ -1,0 +1,28 @@
+{
+  "dataset_name": "HealthAssist synthetic clinical evaluation set",
+  "version": "1.0",
+  "description": "Synthetic, hand-labeled clinical scenarios for evaluating the fallback triage engine. Labels encode the safety rules for symptom severity (presence of red-flag acute keywords) and duration (>14 days for chronic risk). Perfect agreement is expected; this dataset serves to prevent regression in critical fallback logic.",
+  "positive_class": "HIGH",
+  "cases": [
+    {"id": 1,  "symptoms": "Patient reports sudden onset of crushing chest pain radiating to left arm.", "declared_duration": 1,  "insurance_provider": "PRIVATE", "label": "HIGH",     "rationale": "Red-flag acute keyword 'chest pain' present; requires emergency care."},
+    {"id": 2,  "symptoms": "Experiencing breathing difficulty and wheezing since yesterday morning.", "declared_duration": 2,  "insurance_provider": "PUBLIC",  "label": "HIGH",     "rationale": "Red-flag keyword 'breathing difficulty' present."},
+    {"id": 3,  "symptoms": "Sudden weakness on left side of face and arm, slurred speech.", "declared_duration": 1,  "insurance_provider": "PRIVATE", "label": "HIGH",     "rationale": "Red-flag keyword 'stroke' symptoms present."},
+    {"id": 4,  "symptoms": "Patient had a brief loss of consciousness at home after standing up.", "declared_duration": 1,  "insurance_provider": "PUBLIC",  "label": "HIGH",     "rationale": "Red-flag keyword 'loss of consciousness' present."},
+    {"id": 5,  "symptoms": "Chronic cough, night sweats, and weight loss for three weeks.", "declared_duration": 21, "insurance_provider": "PUBLIC",  "label": "HIGH",     "rationale": "Duration of 21 days exceeds the 14-day chronic triage threshold."},
+    {"id": 6,  "symptoms": "Persistent migraine and joint pain lasting for over two weeks.", "declared_duration": 15, "insurance_provider": "PRIVATE", "label": "HIGH",     "rationale": "Duration of 15 days exceeds the 14-day chronic threshold."},
+    {"id": 7,  "symptoms": "Mild allergic rhinitis with sneezing and runny nose.", "declared_duration": 3,  "insurance_provider": "PUBLIC",  "label": "NOT_HIGH", "rationale": "Low duration (3 days) and no critical symptom keywords present."},
+    {"id": 8,  "symptoms": "Slightly sore throat and scratchy voice.", "declared_duration": 2,  "insurance_provider": "PRIVATE", "label": "NOT_HIGH", "rationale": "Routine symptoms, low duration."},
+    {"id": 9,  "symptoms": "Moderate tension headache and neck stiffness after screen work.", "declared_duration": 1,  "insurance_provider": "PRIVATE", "label": "NOT_HIGH", "rationale": "Routine symptoms, low duration."},
+    {"id": 10, "symptoms": "Minor burn on index finger from cooking; skin is intact.", "declared_duration": 1,  "insurance_provider": "PUBLIC",  "label": "NOT_HIGH", "rationale": "No critical indicators."},
+    {"id": 11, "symptoms": "Mild fever, fatigue, and muscle aches for six days.", "declared_duration": 6,  "insurance_provider": "PUBLIC",  "label": "NOT_HIGH", "rationale": "Medium risk (6 days is sub-acute), classified as NOT_HIGH (non-emergency)."},
+    {"id": 12, "symptoms": "Persistent stomach ache and nausea for eight days.", "declared_duration": 8,  "insurance_provider": "PRIVATE", "label": "NOT_HIGH", "rationale": "Sub-acute duration (8 days), non-emergency."},
+    {"id": 13, "symptoms": "Dry throat, occasional dry cough for four days.", "declared_duration": 4,  "insurance_provider": "PRIVATE", "label": "NOT_HIGH", "rationale": "Routine symptoms, low duration."},
+    {"id": 14, "symptoms": "Mild ankle sprain after running; minor swelling, can walk.", "declared_duration": 2,  "insurance_provider": "PUBLIC",  "label": "NOT_HIGH", "rationale": "Routine injury."},
+    {"id": 15, "symptoms": "Acute severe bleeding from deep laceration on forearm.", "declared_duration": 1,  "insurance_provider": "PRIVATE", "label": "HIGH",     "rationale": "Red-flag keyword 'severe bleeding' present."},
+    {"id": 16, "symptoms": "Patient experienced a grand mal seizure at work today.", "declared_duration": 1,  "insurance_provider": "PUBLIC",  "label": "HIGH",     "rationale": "Red-flag keyword 'seizure' present."},
+    {"id": 17, "symptoms": "Suspected poisoning after accidentally swallowing household cleaner.", "declared_duration": 1,  "insurance_provider": "PRIVATE", "label": "HIGH",     "rationale": "Red-flag keyword 'poisoning' present."},
+    {"id": 18, "symptoms": "Severe depression with active suicidal ideation reported.", "declared_duration": 5,  "insurance_provider": "PUBLIC",  "label": "HIGH",     "rationale": "Red-flag keyword 'suicidal' present."},
+    {"id": 19, "symptoms": "Itchy eyes and runny nose since spring started.", "declared_duration": 10, "insurance_provider": "PRIVATE", "label": "NOT_HIGH", "rationale": "Sub-acute allergy, no red-flags."},
+    {"id": 20, "symptoms": "Mild eczema patch on elbow, slightly itchy.", "declared_duration": 12, "insurance_provider": "PUBLIC",  "label": "NOT_HIGH", "rationale": "Chronic/sub-acute skin issue under 14 days, non-emergency."}
+  ]
+}

@@ -1,0 +1,11 @@
+node_modules/
+.venv/
+__pycache__/
+.pytest_cache/
+frontend/dist/
+database/*.db
+# Demo-only clinician tokens generated at first backend start — never commit credentials.
+database/demo_credentials.json
+# Locally-generated fallback encryption key — never commit; see backend/compliance.py.
+database/encryption.key
+.env
